@@ -51,7 +51,7 @@
     \item \textcolor{red}{\textbf{Discussion:} (Interpretation, limitations, and data considerations)} \\
     \item \textcolor{red}{\textbf{Deeper Dive?} (Extending ideas and exploring more complex models)} \\
     \item \textcolor{red}{\textbf{Conclusion:} (Summary and extensions)} \\
-    \item \textcolor{red}{\textbf{Reflection:} (Audio Feeback changes)} \\
+    \item \textcolor{red}{\textbf{Reflection:} (Audio Feeback changes and RECENT EMAIL NOTES} \\
     \item \textcolor{red}{\textbf{AI Usage Citations:} (Clearly cite AI and explain how it was used)} \\
     \item \textcolor{blue}{\textbf{References:} (Literature and sources)} \\
     Completed, but should filter out the unnecessary ones
@@ -87,8 +87,9 @@
     This confirms that the units on both sides of the equation are consistent, validating the physical correctness of the heat equation in terms of dimensional analysis.
     This new unit is called the Volumetric Heat Capacity, which represents the amount of heat required to raise the temperature of a unit volume of the material by one degree Celsius. 
     It is a crucial parameter in understanding how materials respond to thermal energy and is commonly used in heat transfer calculations and thermal analysis. 
+    \subsection*{\textcolor{blue}{Important Mention: Show some example graphs and talk about it and computation time}}
 
-    \subsection*{\textcolor{violet}{Project Extension: From 1D to 2D or 3D}}
+    \subsection*{\textcolor{violet}{Project Extension: From 1D to 2D or 3D??}}
     \[\text{2D Heat equation: Cartesian | } \rho c_p \frac{\partial T}{\partial t} = k \left(\frac{\partial^2 T}{\partial x^2} +\frac{\partial^2 T}{\partial y^2}\right)\]
     \[\text{2D Heat equation: Polar | } \rho c_p \frac{\partial T}{\partial t} = k \left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial T}{\partial r}\right) +\frac{1}{r^2}\frac{\partial^2 T}{\partial \theta^2}\right)\]
     \[\text{3D Heat equation: | } \rho c_p \frac{\partial T}{\partial t} = k \left(\frac{\partial^2 T}{\partial x^2} +\frac{\partial^2 T}{\partial y^2} +\frac{\partial^2 T}{\partial z^2}\right)\]
@@ -171,13 +172,51 @@
 
     \noindent
     \textbf{What is this provided code doing?} \\
-    First off, Magic. Secondly, 
-    \\
+    First off, Magic. Secondly, we were given a list of material properties and respective settings
+    \begin{itemize}
+        \item Aluminum (Al): \\ Density = 2700 $kg/m^3$, Thermal Conductivity = 205 $W/m\cdot^\circ C$, Specific Heat = 900 $J/kg\cdot^\circ C$
+        \item Stainless Steel (SS): \\ Density = 8000 $kg/m^3$, Thermal Conductivity = 16 $W/m\cdot^\circ C$, Specific Heat = 500 $J/kg\cdot^\circ C$
+        \item Copper (Cu): \\ Density = 8900 $kg/m^3$, Thermal Conductivity = 385 $W/m\cdot^\circ C$, Specific Heat = 385 $J/kg\cdot^\circ C$
+        \item 3D Printed Stainless Steel (ADD): \\ Density = 8000 $kg/m^3$, Thermal Conductivity = 16 $W/m\cdot^\circ C$, Specific Heat = 500 $J/kg\cdot^\circ C$ \\ (but with different thermal properties based on printing direction)
+    \end{itemize}
     \noindent
+    Material and environmental settings for the dataset:
+    \begin{itemize}
+        \item Temp = Bool: Allows for a custom initial temperature instead of starting at 0F
+        \item Wind = Bool: Allows for wind to push and affect the temperature outside of the rod,
+        \item Al = Bool: Indicates the use of aluminum,
+        \item SS = Bool: Indicates the use of stainless steel,
+        \item Cu = Bool: Indicates the use of copper,
+     \end{itemize}
+    3D printed Stainless Steel settings for more nuanced thermal properties:
+    \begin{itemize}
+        \item ADD = Bool: Indicates the use of 3D printed Stainless Steel
+        \item XN = Bool: Printing the rod along the X-negitive direction
+        \item XP = Bool: Printing the rod along the X-positive direction
+        \item YN = Bool: Printing the rod along the Y-negitive direction
+        \item YP = Bool: Printing the rod along the Y-positive direction
+    \end{itemize}
+    These setings are a bit confusing at first, but due to the nature of 3D printing, depending on the leading direction of printing, 
+    the cooling fan, can affect extrution and the drying progress so the densitiy and thermal properties of the rod are slightly different. \\
+
+    Depending on the options we choose, the code will pull an excel file provided by those students that are about 4000 rows by 8 columns of data. 
+    Then the code compiles it together and from the best of my understanding, does the following:
+    \begin{enumerate}
+        \item \textbf{Aquiring Data}: Pulls all the temperature data at the 6 points along the rod over time given our chosen settings
+        \item \textbf{Building the Matrix Model}:Fits all the needed data into a PDE approximating matrix along with the boundary conditions and the initial temperature gradient
+        \item \textbf{Boundary Gradient Approximation}:Iteratively applies a second order backward finite difference scheme best approximate points at and near the boundaries. This solves for $\frac{\partial T}{\partial x}$ at the boundaries to know how much heat enters the rod.
+        \item \textbf{Steady State Solution Approximation}:Then approximates the points near the end of the time range for the steady state solution. This solves for $\nu$ (convection coefficient) and an initial guess for $k$ (thermal conductivity) for the material and settings we chose
+        \item \textbf{Transient Modeling}:Inputs the predicted temperatures into a 100 term fourier series to build a nice continuous function from distrete points. This solves for a very good approx for $\alpha$ (speed of the heat) and $k$ (conductivity).
+        \item \textbf{Optimization}:Compares the predicted temperatures with the actual temperatures using a least squares error metric to see how well the model is doing. This solves for the error of the model and how well it fits the real world data.
+        \item \textbf{Gathering Parameters}: This Magic Code found a great approximation for the following values: $\nu$, $k$, and $\alpha$ and $\frac{\partial T}{\partial y}$ at the boundaries, now we can substitude these values back into the PDE
+        \item \textbf{Visual Comparison}:Then plots the predicted and actual temperature values over time to visually compare the model's performance against the real-world data.
+    \end{enumerate}
+    \noindent \\\\
     \textbf{How accurate is our model?} \\
-    We can compare our model's predictions to real-world data by measuring the temperature at specific points along the rod over time and comparing those 
-    measurements to the values predicted by our finite element model. This comparison allows us to validate our model and assess its accuracy in capturing the heat conduction process.
-    
+    Quite accurate! The images below show that both plots look nearly identical. Honestly surprised we could take 4000 points per thermocouple and get such a good fit with only 6 spatial points. 
+    The code also outputs a highly detailed chart of all the obtained values, with standard error, the unknown parameter estimation errors, and more.
+    \subsection*{\textcolor{blue}{Important Mention: Show some example graphs and talk about it and computation time}}
+
 \section*{Analysis and Results of Real World Model}
 
 \section*{Discussion}
