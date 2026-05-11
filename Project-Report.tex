@@ -4,6 +4,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{fancyhdr}
+\usepackage{xcolor}
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}
 \usepackage[
   letterpaper,
@@ -32,28 +33,48 @@
 \end{tabular}}
 \end{center}
 
-\section*{Suggested Structure for Final Report}
+\section*{Progress Checklist}
 \begin{itemize}
-    \item \textbf{Introduction:} Problem, motivation, and context
-    \item \textbf{Background:} Definitions and setup
-    \item \textbf{Model Development:} Derivation and assumptions
-    \item \textbf{Analysis:} Mathematical results and explanations
-    \item \textbf{Discussion:} Interpretation, limitations, and data considerations
-    \item \textbf{Conclusion:} Summary and extensions
-    \item \textbf{References:} Literature and sources
+    \item \textcolor{blue}{\textbf{Introduction:} (Problem, motivation, and context)} \\
+    Completed
+    \item \textcolor{blue}{\textbf{Background:} (Definitions and setup)} \\
+    Completed
+    \item \textcolor{red}{\textbf{Model Development:} (Derivation and assumptions)} \\
+    Almost Done, needs images and more details
+    \item \textcolor{red}{\textbf{Analysis:} (Mathematical results and explanations)} \\
+    In Progress, needs images and more details
+    \item \textcolor{red}{\textbf{Discussion:} (Interpretation, limitations, and data considerations)} \\
+    \item \textcolor{red}{\textbf{Real World Data Comparison:} (Comparison to actual dataset)} \\
+    In Progress, explain code, all the variations, what else it's doing and how it's comparing the model to actual dataset, needs more details and images
+    \item \textcolor{red}{\textbf{Analysis:} (Mathematical results and explanations)} \\
+    In Progress, needs images and more details
+    \item \textcolor{red}{\textbf{Discussion:} (Interpretation, limitations, and data considerations)} \\
+    \item \textcolor{red}{\textbf{Deeper Dive?} (Extending ideas and exploring more complex models)} \\
+    \item \textcolor{red}{\textbf{Conclusion:} (Summary and extensions)} \\
+    \item \textcolor{red}{\textbf{Reflection:} (Audio Feeback changes)} \\
+    \item \textcolor{red}{\textbf{AI Usage Citations:} (Clearly cite AI and explain how it was used)} \\
+    \item \textcolor{blue}{\textbf{References:} (Literature and sources)} \\
+    Completed, but should filter out the unnecessary ones
+    \item \textcolor{red}{\textbf{Include more images than poster:}} 
+    \item \textcolor{red}{\textbf{Final Formatting Tweaks:}} 
+    \item \textcolor{red}{\textbf{Final Page Count excluding Images:}}
+    \item \textcolor{red}{\textbf{Summary of work on Presentation:}}
 \end{itemize}
 
-
 \section*{Introduction}
+    If someone were to give you along rod that is heated at one end and cooled at the other, and that person told you to provide the temperature at a particular point along the rod at a particular time, you would not be automaically able to calculate that value without some external help or algorithms.
+    We would want to solve a partial differential equation that describes how heat diffuses through the rod, which is called the heat equation, to understand how the temperature changes over time and space.
+    \\\\
+    But because this is a difficult equation to solve analytically and even more complicated to obtain a nice closed form solution, we can use an iterative method to approximate the temperature distribution along the rod at discrete points in space and time.
+    This method allows us to solve this equation, we can use the finite element method (FEM) to discretize the spatial domain and then apply a time-stepping scheme to evolve the solution over time.
+    \\\\
+    FEM is quite similar to a finite difference method, but as we deal with more complex geometries and higher dimensions, the finite element method becomes more advantageous due to its flexibility in handling irregular meshes and complex boundary conditions.
 
 \section*{Background}
 
-\section*{Model Development}
     \subsection*{The Governing Heat Equation}
     For a one-dimensional rod, the heat conduction is governed by:
-    \[
-    \rho c_p \frac{\partial T}{\partial t} = k \frac{\partial^2 T}{\partial x^2}
-    \]
+    \[\rho c_p \frac{\partial T}{\partial t} = k \frac{\partial^2 T}{\partial x^2}\]
     \begin{itemize}
         \item $\frac{\partial T}{\partial t} = $ the rate of change of temperature with respect to time ($^\circ C / s$)
         \item $\frac{\partial^2 T}{\partial x^2} = $ sensitivity of temperature changes at a specific point from its neighbors ($^\circ C / m^2$)
@@ -67,13 +88,21 @@
     This new unit is called the Volumetric Heat Capacity, which represents the amount of heat required to raise the temperature of a unit volume of the material by one degree Celsius. 
     It is a crucial parameter in understanding how materials respond to thermal energy and is commonly used in heat transfer calculations and thermal analysis. 
 
+    \subsection*{\textcolor{violet}{Project Extension: From 1D to 2D or 3D}}
+    \[\text{2D Heat equation: Cartesian | } \rho c_p \frac{\partial T}{\partial t} = k \left(\frac{\partial^2 T}{\partial x^2} +\frac{\partial^2 T}{\partial y^2}\right)\]
+    \[\text{2D Heat equation: Polar | } \rho c_p \frac{\partial T}{\partial t} = k \left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial T}{\partial r}\right) +\frac{1}{r^2}\frac{\partial^2 T}{\partial \theta^2}\right)\]
+    \[\text{3D Heat equation: | } \rho c_p \frac{\partial T}{\partial t} = k \left(\frac{\partial^2 T}{\partial x^2} +\frac{\partial^2 T}{\partial y^2} +\frac{\partial^2 T}{\partial z^2}\right)\]
+
+
+\section*{Model Development}
+    
     \subsection*{Boundary and Initial Conditions}
-    The model uses the Dirichlet boundary conditions. Meaning the temperature never changes at the boundaries yet allows every other value to vary. The specific conditions are:
-    \begin{align*}
-        \hspace{1.5cm} T(0, t) &= 100^\circ\text{F} \quad \text{(Left Boundary)}  \\
-        \quad\quad T(L, t) &= 20^\circ\text{F} \quad \text{(Right Boundary)}  \\
-        \quad\quad\quad T(x, 0) &= T(x) \quad \text{(Initial Temperature Gradient)} 
-    \end{align*}
+        The model uses the Dirichlet boundary conditions. Meaning the temperature never changes at the boundaries yet allows every other value to vary. The specific conditions are:
+        \begin{align*}
+            \hspace{1.5cm} T(0, t) &= 100^\circ\text{F} \quad \text{(Left Boundary)}  \\
+            \quad\quad T(L, t) &= 20^\circ\text{F} \quad \text{(Right Boundary)}  \\
+            \quad\quad\quad T(x, 0) &= T(x) \quad \text{(Initial Temperature Gradient)} 
+        \end{align*}
 
     \subsection*{Finite Element Analysis}
     The rod is divided into $n$ equally spaced elements of length $h = L/n$. 
@@ -104,20 +133,25 @@
     Now, we can express the spatial second derivative using the finite element method, which leads to a
     system of equations that can be represented in matrix form as:
     \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n}\]
-    
-    \vspace{5cm}
+
+    \subsection*{\textcolor{violet}{Project Extension: Record calculation time}}
+
     \noindent
     \textbf{3. Boundary Treatment (Dirichlet):} \\
-    
+    \noindent
     Now, accounting for the initial Dirichlet boundary conditions, we can incorporate the boundary conditions into the system of equations by adding a vector $\mathbf{b}_{bc}$, 
     which enforces the fixed temperatures at the boundaries $(100^\circ\text{F}, 20^\circ\text{F})$, effectively driving the heat flow toward a linear steady-state where $\mathbf{K}\mathbf{T} = \mathbf{0}$.
     meaning there is no net heat flow and the temperature distribution is stable.
     \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n} + \mathbf{b}_{bc}\]
     
+\section*{Analysis and Results of General Model}
+
+\section*{Real World Data Comparison}
+
     \noindent
-    \textbf{4. Optional Air Temperature Affect} \\
+    \textbf{Air Temperature Affect} \\
     \noindent
-    Later we will account for ambient air influence, the 1D heat conduction is now governed by:
+    To make this equation more realistic by incorporating ambient air influence, the 1D heat conduction is now governed by:
     \[\frac{\partial T}{\partial t} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
     \begin{itemize}
         \item $\nu$: Convection Coefficient $(s^{-1})$ $\quad \bullet$ $T =$ Temperature ($^\circ$C), $\quad \bullet$ $T_{\infty} =$ Ambient Temperature ($^\circ$C)
@@ -125,8 +159,26 @@
     If we convert this to a similar backward Euler scheme, we can derive the following scheme:
     \[(\mathbf{I} - \alpha \Delta t \mathbf{K}' + \nu \Delta t \mathbf{I}) \mathbf{T}^{n+1} = \mathbf{T}^{n} + \nu \Delta t T_\infty\mathbf{I} + \mathbf{b}_{bc}\]
     This now makes the iteration scheme a bit more complicated than before, yet all we've actually done is add more constants to both sides of the equation to involve the ambient temperature.
+    \subsection*{\color{violet}{Project Extension: Record calculation time again with air affect}}
+    
+    \textbf{Using a Real World Dataset} \\
+    We are going to use a pretty large dataset of temperature measurements along a rod over time, which was collected by students at the Missouri University of Science and Technology.
+    This dataset also provides extra parameters for different types of metals and a setting for including wind moving the air outside of the rod. 
 
-\section*{Analysis}
+    \subsection*{\textcolor{blue}{Important mention: In the main corner models, we had a similar number of space and time points, but this model has way more time points to compensate for barely any space points}}
+    From what we mentioned before, this dataset is unique because the experiement only had 6 points along the rod that measureed the temperateure, but they had 4000 time steps, 
+    which compensates for the few spatial points and allows us to have a more accurate model with such a high degree of precision. \\
+
+    \noindent
+    \textbf{What is this provided code doing?} \\
+    First off, Magic. Secondly, 
+    \\
+    \noindent
+    \textbf{How accurate is our model?} \\
+    We can compare our model's predictions to real-world data by measuring the temperature at specific points along the rod over time and comparing those 
+    measurements to the values predicted by our finite element model. This comparison allows us to validate our model and assess its accuracy in capturing the heat conduction process.
+    
+\section*{Analysis and Results of Real World Model}
 
 \section*{Discussion}
 
@@ -143,57 +195,58 @@
 \end{itemize}
 
 \subsection*{Audio Feedbackn from Poster}
-\begin{enumerate}
+    \begin{enumerate}
 
-    \item well executed focus and application
-    \item stronger applied poster in the class
-    \item bit of visual clutter (images too big) and more story
-    \item clear images but print whole poster
-    \item great font sizes to see from a distance
-    \item main thing is add more detailed images and less frozen either and hard to itentify final result since they look too similar
-    \item great analysis of heat equation and details behind them and how the method works
-    \item really like i took olivers suggestion for real world data thats a strong element of the poster and great contant i can keep leaning on
-    \item main take away is clear but modify the first parts of story and last part is great
-    \item what did we learn feedback, a box for the take away, not obvious for conclusion for reader but great understanding
-    \item need to show off the references more in poster but pretty good 98%
-\end{enumerate}
+        \item well executed focus and application
+        \item stronger applied poster in the class
+        \item bit of visual clutter (images too big) and more story
+        \item clear images but print whole poster
+        \item great font sizes to see from a distance
+        \item main thing is add more detailed images and less frozen either and hard to itentify final result since they look too similar
+        \item great analysis of heat equation and details behind them and how the method works
+        \item really like i took olivers suggestion for real world data thats a strong element of the poster and great contant i can keep leaning on
+        \item main take away is clear but modify the first parts of story and last part is great
+        \item what did we learn feedback, a box for the take away, not obvious for conclusion for reader but great understanding
+        \item need to show off the references more in poster but pretty good 98%
+    \end{enumerate}
+
 \subsection*{References (1 Page)}
-\subsection*{General Links for Sources about FEA}
+    \subsection*{General Links for Sources about FEA}
 
-\begin{itemize}
-    \item \textbf{``Why is a Triangular Element Stiffer?''} \textit{EnterFEA}. \\ 
-    \url{https://enterfea.com/why-is-a-triangular-element-stiffer/}
-    
-    \item \textbf{``The Importance of Mesh Convergence.''} \textit{NAFEMS Knowledge Base}. \\ 
-    \url{https://www.nafems.org/publications/knowledge-base/the-importance-of-mesh-convergence-part-1/}
-    
-    \item \textbf{``What is Finite Element Analysis and How Does It Really Work?''} \textit{Fidelis FEA}. \\ 
-    \url{https://www.fidelisfea.com/post/what-is-finite-element-analysis-and-how-does-it-really-work}
-    
-    \item \textbf{``What Is FEA | Finite Element Analysis?''} \textit{SimScale Documentation}. \\ 
-    \url{https://www.simscale.com/docs/simwiki/fea-finite-element-analysis/what-is-fea-finite-element-analysis/}
-    
-    \item \textbf{``What Is Finite Element Analysis?''} \textit{MathWorks Discovery}. \\ 
-    \url{https://www.mathworks.com/discovery/finite-element-analysis.html}
-    
-    \item \textbf{``Solving Partial Differential Equations with Finite Elements.''} \textit{Wolfram Reference}. \\ 
-    \url{https://reference.wolfram.com/language/FEMDocumentation/tutorial/SolvingPDEwithFEM.html}
-\end{itemize}
+    \begin{itemize}
+        \item \textbf{``Why is a Triangular Element Stiffer?''} \textit{EnterFEA}. \\ 
+        \url{https://enterfea.com/why-is-a-triangular-element-stiffer/}
+        
+        \item \textbf{``The Importance of Mesh Convergence.''} \textit{NAFEMS Knowledge Base}. \\ 
+        \url{https://www.nafems.org/publications/knowledge-base/the-importance-of-mesh-convergence-part-1/}
+        
+        \item \textbf{``What is Finite Element Analysis and How Does It Really Work?''} \textit{Fidelis FEA}. \\ 
+        \url{https://www.fidelisfea.com/post/what-is-finite-element-analysis-and-how-does-it-really-work}
+        
+        \item \textbf{``What Is FEA | Finite Element Analysis?''} \textit{SimScale Documentation}. \\ 
+        \url{https://www.simscale.com/docs/simwiki/fea-finite-element-analysis/what-is-fea-finite-element-analysis/}
+        
+        \item \textbf{``What Is Finite Element Analysis?''} \textit{MathWorks Discovery}. \\ 
+        \url{https://www.mathworks.com/discovery/finite-element-analysis.html}
+        
+        \item \textbf{``Solving Partial Differential Equations with Finite Elements.''} \textit{Wolfram Reference}. \\ 
+        \url{https://reference.wolfram.com/language/FEMDocumentation/tutorial/SolvingPDEwithFEM.html}
+    \end{itemize}
 
-\subsection*{Links for Thermal Property Values Estimator Infomation and Code}
+    \subsection*{Links for Thermal Property Values Estimator Infomation and Code}
 
-\begin{itemize}
-    \item \textbf{``Material thermal properties estimation via a one-dimensional transient convection model.''} \textit{Applied Thermal Engineering}, ScienceDirect. \\ 
-    \url{https://doi.org/10.1016/j.applthermaleng.2020.116230}
-    
-    \item \textbf{``Data on the Validation to Determine the Material Thermal Properties Estimation.''} \textit{Data in Brief}, ScienceDirect. \\ 
-    \url{https://doi.org/10.1016/j.dib.2021.107577}
-    
-    \item \textbf{``Python code for 1D $k$ and $h$ value Estimator.''} \textit{Zenodo Repository}. \\ 
-    \url{https://zenodo.org/records/5683312}
-    
-    \item \textbf{``oneDkhEstimator Required Dataset.''} \textit{Mendeley Data}. \\ 
-    \url{https://data.mendeley.com/datasets/sbcf36976g/1}
-\end{itemize}
+    \begin{itemize}
+        \item \textbf{``Material thermal properties estimation via a one-dimensional transient convection model.''} \textit{Applied Thermal Engineering}, ScienceDirect. \\ 
+        \url{https://doi.org/10.1016/j.applthermaleng.2020.116230}
+        
+        \item \textbf{``Data on the Validation to Determine the Material Thermal Properties Estimation.''} \textit{Data in Brief}, ScienceDirect. \\ 
+        \url{https://doi.org/10.1016/j.dib.2021.107577}
+        
+        \item \textbf{``Python code for 1D $k$ and $h$ value Estimator.''} \textit{Zenodo Repository}. \\ 
+        \url{https://zenodo.org/records/5683312}
+        
+        \item \textbf{``oneDkhEstimator Required Dataset.''} \textit{Mendeley Data}. \\ 
+        \url{https://data.mendeley.com/datasets/sbcf36976g/1}
+    \end{itemize}
 
 \end{document}

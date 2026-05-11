@@ -60,9 +60,9 @@ cur_version = sys.version_info # Test for Python version:
 wb = Workbook() # Workbook is created
 
 #select files to run. Files must be a .txt format with time, temperature
-filefolder="C:\\Users\\jling\\OneDrive\\Desktop\\VSCode\\Math-675-Grad-Diff-EQ\\Project Online Data\\" #location of data
-excelsaveloc="C:\\Users\\jling\\OneDrive\\Desktop\\VSCode\\Math-675-Grad-Diff-EQ\\Project Online Data\\" #location to save excel file of results
-plotsaveloc = "C:\\Users\\jling\\OneDrive\\Desktop\\VSCode\\Math-675-Grad-Diff-EQ\\Project Images\\" #location to save plots
+filefolder="Project Online Data/" #location of data
+excelsaveloc="Project Online Data/" #location to save excel file of results
+plotsaveloc="Project Images/" #location to save plots
 
 filesave='ADDXNSS'  #Excel filename
 
