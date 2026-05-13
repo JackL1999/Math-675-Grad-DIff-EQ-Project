@@ -397,4 +397,33 @@ VALUES FOR Xn1-5, redo for Cu1-5 on Windows
 \end{tabularx}
 \end{table}
 
+
+\[\frac{dT}{dt} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
+\[\frac{T_i^{n+1} - T_i^n}{\Delta t} = \alpha \left( \frac{T_{i+1}^{n+1} - 2T_i^{n+1} + T_{i-1}^{n+1}}{(\Delta x)^2} \right) - \nu(T_i^{n+1} - T_\infty)\]
+\[\text{Let F} = \alpha \frac{\Delta t}{(\Delta x)^2}\]
+\[-F T_{i-1}^{n+1} + (1 + 2F + \nu \Delta t) T_i^{n+1} - F T_{i+1}^{n+1} = T_i^n + \nu \Delta t T_\infty\]
+\[\begin{bmatrix} 
+(1+2F+\nu\Delta t) & -F & 0 & \dots \\
+-F & (1+2F+\nu\Delta t) & -F & \dots \\
+0 & -F & (1+2F+\nu\Delta t) & -F \\
+\vdots & \vdots & -F & (1+2F+\nu\Delta t) 
+\end{bmatrix}
+\begin{bmatrix} 
+T_1^{n+1} \\
+T_2^{n+1} \\
+T_3^{n+1} \\
+\vdots \\
+T_N^{n+1}
+\end{bmatrix}
+=
+\begin{bmatrix} 
+T_1^n + \nu \Delta t T_\infty + F T_L \\
+T_2^n + \nu \Delta t T_\infty \\
+T_3^n + \nu \Delta t T_\infty \\
+\vdots \\
+T_N^n + \nu \Delta t T_\infty + F T_R
+\end{bmatrix}\]
+
+\[\rho c_p \frac{\partial T}{\partial t} = k \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
+
 \end{document}
