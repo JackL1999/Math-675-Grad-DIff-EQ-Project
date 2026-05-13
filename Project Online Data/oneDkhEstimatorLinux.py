@@ -70,7 +70,7 @@ filesave='ADDXNSS'  #Excel filename
 
 #Wind = False
 Temp = False
-XN = True
+##XN = True
 #YN = True
 #XP = True
 #YP = True
@@ -79,8 +79,8 @@ XN = True
 
 #Al = False
 #SS = False
-#Cu = True
-ADD = True
+Cu = True
+#ADD = True
 
 try:
     SS

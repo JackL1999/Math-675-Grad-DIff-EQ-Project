@@ -288,4 +288,66 @@
         \url{https://data.mendeley.com/datasets/sbcf36976g/1}
     \end{itemize}
 
+\vspace{10cm}
+\[f(x) = \frac{a_0}{2} + \sum_{n=1}^{100} a_n \cos(nx) + b_n \sin(nx)\]
+\vspace{0.2cm}
+\[S = \sum_{i=1}^{n} \left( y_i - f(x_i) \right)^2 \]
+\vspace{0.2cm}
+\[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n} + \mathbf{b}_{bc}\]
+
+\begin{table}[h]
+\centering
+\caption{Thermal Parameter Comparison: Bulk Copper vs. 3D-Printed Steel (XN)}
+\label{tab:material_comparison}
+% We use 'l' for the labels and 'c' for the numbers to keep them tight. 
+% The final 'X' column will take up all the remaining horizontal space.
+\begin{tabularx}{\textwidth}{l c}
+\toprule
+\textbf{Property} & \textbf{Copper} \\
+\midrule
+Conductivity ($k$) & $384.72$ W/m$\cdot^{\circ}\text{C}$ \\
+\addlinespace
+Diffusivity ($\alpha$) & $0.0738$ m$^2$/s \\
+\addlinespace
+Convection ($h$) & $165.41$ W/m$^2\cdot^{\circ}\text{C} $ \\
+\addlinespace
+Avg. Std. Error & $0.95$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vspace{2cm}
+
+\begin{table}[h]
+\centering
+\caption{Thermal Parameter Comparison: Bulk Copper vs. 3D-Printed Steel (XN)}
+\label{tab:material_comparison}
+% We use 'l' for the labels and 'c' for the numbers to keep them tight. 
+% The final 'X' column will take up all the remaining horizontal space.
+\begin{tabularx}{\textwidth}{l c c X}
+\toprule
+\textbf{Property} & \textbf{Copper} & \textbf{3D Printed} & \textbf{Physical Interpretation} \\
+\midrule
+Conductivity ($k$) & $384.72$ W/m$\cdot^{\circ}\text{C}$ & $14.40$ W/m$\cdot^{\circ}\text{C}$ & 3DP is $\approx$ 26x more resistive to heat flow than Cu. \\
+\addlinespace
+Diffusivity ($\alpha$) & $0.0738$ m$^2$/s & $0.0213$ m$^2$/s & Cu reaches steady state $\approx$ 3.5x faster than 3DP. \\
+\addlinespace
+Convection ($h$) & $165.41$ W/m$^2\cdot^{\circ}\text{C} $& $128.70$ W/m$^2\cdot^{\circ}\text{C}$ & Variations due to ambient lab/wind conditions. \\
+\addlinespace
+Avg. Std. Error & $0.95$ & $0.73$ & Low error validates 1D FEA model robustness. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\[\frac{\partial T}{\partial t} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
+\[\rho c_p \frac{\partial T}{\partial t} = k \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
+VALUES FOR Xn1-5, redo for Cu1-5 on Windows
+\begin{itemize}
+    \item $\rho \approx 7828.79$
+    \item $c_p \approx 502$
+    \item $k \approx 11.313$
+    \item $\nu \approx 0.096$ 
+    \item $\alpha \approx 0.224$
+    \item with $T_{\infty} = 20.8$
+\end{itemize}
+\[\frac{\partial T}{\partial t} = 0.022387 \frac{\partial^2 T}{\partial x^2} - 0.096192(T - 20.8)\]
 \end{document}
