@@ -7,6 +7,9 @@
 \usepackage{xcolor}
 \usepackage{caption} % Add this to your preamble
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}
+\usepackage{setspace}
+\onehalfspacing
+
 \usepackage[
   letterpaper,
   left=0.5in,
@@ -24,7 +27,13 @@
 \rfoot{Page \thepage}
 \lfoot{Project Notes}
 
+\linespread{1.5}
 \begin{document}
+\begin{center}
+    \LARGE \textbf{Heat Equation with Finite Element Analysis } \\[0.5cm]
+    \large by Jack Linbeck and Joshua Dunne \\[0.3cm]
+    \today
+\end{center}
 \large
 \begin{center}
 \fbox{\begin{tabular}{c}
@@ -88,13 +97,33 @@
     This confirms that the units on both sides of the equation are consistent, validating the physical correctness of the heat equation in terms of dimensional analysis.
     This new unit is called the Volumetric Heat Capacity, which represents the amount of heat required to raise the temperature of a unit volume of the material by one degree Celsius. 
     It is a crucial parameter in understanding how materials respond to thermal energy and is commonly used in heat transfer calculations and thermal analysis. 
-    \subsection*{\textcolor{blue}{Important Mention: Show some example graphs and talk about it and computation time}}
-
-    \subsection*{\textcolor{violet}{Project Extension: From 1D to 2D or 3D??}}
-    \[\text{2D Heat equation: Cartesian | } \rho c_p \frac{\partial T}{\partial t} = k \left(\frac{\partial^2 T}{\partial x^2} +\frac{\partial^2 T}{\partial y^2}\right)\]
-    \[\text{2D Heat equation: Polar | } \rho c_p \frac{\partial T}{\partial t} = k \left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial T}{\partial r}\right) +\frac{1}{r^2}\frac{\partial^2 T}{\partial \theta^2}\right)\]
-    \[\text{3D Heat equation: | } \rho c_p \frac{\partial T}{\partial t} = k \left(\frac{\partial^2 T}{\partial x^2} +\frac{\partial^2 T}{\partial y^2} +\frac{\partial^2 T}{\partial z^2}\right)\]
-
+    \begin{table}[h]
+\captionsetup{labelformat=empty, justification=raggedright, singlelinecheck=off}
+\centering
+\caption{\textbf{How do we build the heat equation from scratch?}}
+\label{tab:heat_derivation}
+\begin{tabularx}{\textwidth}{l p{5.5cm} X} 
+\toprule
+\textbf{Phase} & \textbf{Mathematical Logic} & \textbf{Summary of each Step} \\
+\midrule
+\textbf{1. Net Energy Flow} & $\frac{dE}{dt} = (E_{in} - E_{out}) - E_{loss}$ & Conservation of energy: Change equals net \, \, \, \, conduction minus environmental loss. \\
+\midrule
+\textbf{2. Storage} & $m = \rho V$ \newline $E = m c_p T$ \newline $\frac{dE}{dt} = \rho V c_p \frac{dT}{dt}$ & Mass is density times volume. Energy storage links mass and specific heat to temperature change. \, \, Differentiating now gives us a new relationship\\
+\midrule
+\textbf{3. Conduction} & $E_{in} - E_{out} = -V \frac{\partial}{\partial x}(E_{flux})$ & Net heat movement is the spatial change of energy flux over the slice volume $V$. \\
+\addlinespace
+\textit{Fourier's Law} & $E_{flux} = -k \frac{\partial T}{\partial x}$ & The energy flux, representing flow intensity, \, \,depends on the material's thermal conductivity $k$. \\
+\addlinespace
+\textit{Net Result} & $E_{in} - E_{out} = V k \frac{\partial^2 T}{\partial x^2}$ & This result gives a second derivative (curvature), which forces heat to spread away from hot peaks \\
+\midrule
+\textbf{4. Cooling} & $E_{loss} = V \nu (T - T_\infty)$ & Energy loss to air ($T_\infty = 20.8$) using the effective cooling coefficient $\nu$. \\
+\midrule
+\textbf{5. Substitution} & $\rho V c_p \frac{dT}{dt} = V k \frac{\partial^2 T}{\partial x^2} - V \nu (T - T_\infty)$ & Substitute the movement and loss terms back into the original balance equation. \\
+\midrule
+\textbf{6. Final PDE} & $\frac{dT}{dt} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)$ & Divide by $\rho V c_p$ to solve for $\frac{dT}{dt}$ using diffusivity \, \, $\alpha = \frac{k}{\rho c_p}$, which produces our Heat Equation!! \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \section*{Model Development}
     
@@ -136,7 +165,31 @@
     system of equations that can be represented in matrix form as:
     \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n}\]
 
-    \subsection*{\textcolor{violet}{Project Extension: Record calculation time}}
+    \[\frac{dT}{dt} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
+    \[\frac{T_i^{n+1} - T_i^n}{\Delta t} = \alpha \left( \frac{T_{i+1}^{n+1} - 2T_i^{n+1} + T_{i-1}^{n+1}}{(\Delta x)^2} \right) - \nu(T_i^{n+1} - T_\infty)\]
+    \[\text{Let F} = \alpha \frac{\Delta t}{(\Delta x)^2}\]
+    \[-F T_{i-1}^{n+1} + (1 + 2F + \nu \Delta t) T_i^{n+1} - F T_{i+1}^{n+1} = T_i^n + \nu \Delta t T_\infty\]
+    \[\begin{bmatrix} 
+    (1+2F+\nu\Delta t) & -F & 0 & \dots \\
+    -F & (1+2F+\nu\Delta t) & -F & \dots \\
+    0 & -F & (1+2F+\nu\Delta t) & -F \\
+    \vdots & \vdots & -F & (1+2F+\nu\Delta t) 
+    \end{bmatrix}
+    \begin{bmatrix} 
+    T_1^{n+1} \\
+    T_2^{n+1} \\
+    T_3^{n+1} \\
+    \vdots \\
+    T_N^{n+1}
+    \end{bmatrix}
+    =
+    \begin{bmatrix} 
+    T_1^n + \nu \Delta t T_\infty + F T_L \\
+    T_2^n + \nu \Delta t T_\infty \\
+    T_3^n + \nu \Delta t T_\infty \\
+    \vdots \\
+    T_N^n + \nu \Delta t T_\infty + F T_R
+    \end{bmatrix}\]
 
     \noindent
     \textbf{3. Boundary Treatment (Dirichlet):} \\
@@ -161,7 +214,6 @@
     If we convert this to a similar backward Euler scheme, we can derive the following scheme:
     \[(\mathbf{I} - \alpha \Delta t \mathbf{K}' + \nu \Delta t \mathbf{I}) \mathbf{T}^{n+1} = \mathbf{T}^{n} + \nu \Delta t T_\infty\mathbf{I} + \mathbf{b}_{bc}\]
     This now makes the iteration scheme a bit more complicated than before, yet all we've actually done is add more constants to both sides of the equation to involve the ambient temperature.
-    \subsection*{\color{violet}{Project Extension: Record calculation time again with air affect}}
     
     \textbf{Using a Real World Dataset} \\
     We are going to use a pretty large dataset of temperature measurements along a rod over time, which was collected by students at the Missouri University of Science and Technology.
@@ -213,6 +265,49 @@
         \item \textbf{Visual Comparison}:Then plots the predicted and actual temperature values over time to visually compare the model's performance against the real-world data.
     \end{enumerate}
     \noindent \\\\
+    \textbf{Summary Please its too much} \\
+    \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n} + \mathbf{b}_{bc}\]
+    \[\Downarrow \quad \quad \quad \Downarrow \quad \quad \quad \Downarrow \]
+    \[f(x) = \frac{a_0}{2} + \sum_{n=1}^{100} a_n \cos(nx) + b_n \sin(nx)\]
+    \[\Downarrow \quad \quad \quad \Downarrow \quad \quad \quad \Downarrow \]
+    \[S = \sum_{i=1}^{n} \left( y_i - f(x_i) \right)^2 \]
+    
+
+    \textbf{What does the code tell us?} \\
+    \begin{table}[h]
+    \centering
+    \caption{Thermal Parameter Comparison: Bulk Copper vs. 3D-Printed Steel (XN)}
+    \label{tab:material_comparison}
+    % We use 'l' for the labels and 'c' for the numbers to keep them tight. 
+    % The final 'X' column will take up all the remaining horizontal space.
+    \begin{tabularx}{\textwidth}{l c c X}
+    \toprule
+    \textbf{Property} & \textbf{Copper} & \textbf{3D Printed} & \textbf{Physical Interpretation} \\
+    \midrule
+    Conductivity ($k$) & $384.72$ W/m$\cdot^{\circ}\text{C}$ & $14.40$ W/m$\cdot^{\circ}\text{C}$ & 3DP is $\approx$ 26x more resistive to heat flow than Cu. \\
+    \addlinespace
+    Diffusivity ($\alpha$) & $0.0738$ m$^2$/s & $0.0213$ m$^2$/s & Cu reaches steady state $\approx$ 3.5x faster than 3DP. \\
+    \addlinespace
+    Convection ($h$) & $165.41$ W/m$^2\cdot^{\circ}\text{C} $& $128.70$ W/m$^2\cdot^{\circ}\text{C}$ & Variations due to ambient lab/wind conditions. \\
+    \addlinespace
+    Avg. Std. Error & $0.95$ & $0.73$ & Low error validates 1D FEA model robustness. \\
+    \bottomrule
+    \end{tabularx}
+    \end{table}
+
+    \[\frac{\partial T}{\partial t} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)
+    \Longrightarrow \rho c_p \frac{\partial T}{\partial t} = k \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
+    VALUES FOR Xn1-5, redo for Cu1-5 on Windows
+    \begin{itemize}
+        \item $\rho \approx 7828.79$
+        \item $c_p \approx 502$
+        \item $k \approx 11.313$
+        \item $\nu \approx 0.096$ 
+        \item $\alpha \approx 0.224$
+        \item with $T_{\infty} = 20.8$
+    \end{itemize}
+    \[\frac{\partial T}{\partial t} = 0.022387 \frac{\partial^2 T}{\partial x^2} - 0.096192(T - 20.8)\]
+
     \textbf{How accurate is our model?} \\
     Quite accurate! The images below show that both plots look nearly identical. Honestly surprised we could take 4000 points per thermocouple and get such a good fit with only 6 spatial points. 
     The code also outputs a highly detailed chart of all the obtained values, with standard error, the unknown parameter estimation errors, and more.
@@ -304,12 +399,6 @@
     \end{itemize}
 
 \vspace{10cm}
-\[f(x) = \frac{a_0}{2} + \sum_{n=1}^{100} a_n \cos(nx) + b_n \sin(nx)\]
-\vspace{0.2cm}
-\[S = \sum_{i=1}^{n} \left( y_i - f(x_i) \right)^2 \]
-\vspace{0.2cm}
-\[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n} + \mathbf{b}_{bc}\]
-
 \begin{table}[h]
 \centering
 \caption{Thermal Parameter Comparison: Bulk Copper vs. 3D-Printed Steel (XN)}
@@ -353,77 +442,8 @@ Avg. Std. Error & $0.95$ & $0.73$ & Low error validates 1D FEA model robustness.
 \bottomrule
 \end{tabularx}
 \end{table}
-\[\frac{\partial T}{\partial t} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
-\[\rho c_p \frac{\partial T}{\partial t} = k \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
-VALUES FOR Xn1-5, redo for Cu1-5 on Windows
-\begin{itemize}
-    \item $\rho \approx 7828.79$
-    \item $c_p \approx 502$
-    \item $k \approx 11.313$
-    \item $\nu \approx 0.096$ 
-    \item $\alpha \approx 0.224$
-    \item with $T_{\infty} = 20.8$
-\end{itemize}
-\[\frac{\partial T}{\partial t} = 0.022387 \frac{\partial^2 T}{\partial x^2} - 0.096192(T - 20.8)\]
-
-\vspace{5cm}
 
 
-\begin{table}[h]
-\captionsetup{labelformat=empty, justification=raggedright, singlelinecheck=off}
-\centering
-\caption{\textbf{FINAL PRESENTATION VERSION: Building the 1D Heat Equation from Scratch}}
-\label{tab:heat_derivation}
-\begin{tabularx}{\textwidth}{l p{5.5cm} X} 
-\toprule
-\textbf{Phase} & \textbf{Mathematical Logic} & \textbf{Summary of each Step} \\
-\midrule
-\textbf{1. Net Energy Flow} & $\frac{dE}{dt} = (E_{in} - E_{out}) - E_{loss}$ & Conservation of energy: Change equals net \, \, \, \, conduction minus environmental loss. \\
-\midrule
-\textbf{2. Storage} & $m = \rho V$ \newline $E = m c_p T$ \newline $\frac{dE}{dt} = \rho V c_p \frac{dT}{dt}$ & Mass is density times volume. Energy storage links mass and specific heat to temperature change. \, \, Differentiating now gives us a new relationship\\
-\midrule
-\textbf{3. Conduction} & $E_{in} - E_{out} = -V \frac{\partial}{\partial x}(E_{flux})$ & Net heat movement is the spatial change of energy flux over the slice volume $V$. \\
-\addlinespace
-\textit{Fourier's Law} & $E_{flux} = -k \frac{\partial T}{\partial x}$ & The energy flux, representing flow intensity, \, \,depends on the material's thermal conductivity $k$. \\
-\addlinespace
-\textit{Net Result} & $E_{in} - E_{out} = V k \frac{\partial^2 T}{\partial x^2}$ & This result gives a second derivative (curvature), which forces heat to spread away from hot peaks \\
-\midrule
-\textbf{4. Cooling} & $E_{loss} = V \nu (T - T_\infty)$ & Energy loss to air ($T_\infty = 20.8$) using the effective cooling coefficient $\nu$. \\
-\midrule
-\textbf{5. Substitution} & $\rho V c_p \frac{dT}{dt} = V k \frac{\partial^2 T}{\partial x^2} - V \nu (T - T_\infty)$ & Substitute the movement and loss terms back into the original balance equation. \\
-\midrule
-\textbf{6. Final PDE} & $\frac{dT}{dt} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)$ & Divide by $\rho V c_p$ to solve for $\frac{dT}{dt}$ using diffusivity \, \, $\alpha = \frac{k}{\rho c_p}$, which produces our Heat Equation!! \\
-\bottomrule
-\end{tabularx}
-\end{table}
 
-
-\[\frac{dT}{dt} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
-\[\frac{T_i^{n+1} - T_i^n}{\Delta t} = \alpha \left( \frac{T_{i+1}^{n+1} - 2T_i^{n+1} + T_{i-1}^{n+1}}{(\Delta x)^2} \right) - \nu(T_i^{n+1} - T_\infty)\]
-\[\text{Let F} = \alpha \frac{\Delta t}{(\Delta x)^2}\]
-\[-F T_{i-1}^{n+1} + (1 + 2F + \nu \Delta t) T_i^{n+1} - F T_{i+1}^{n+1} = T_i^n + \nu \Delta t T_\infty\]
-\[\begin{bmatrix} 
-(1+2F+\nu\Delta t) & -F & 0 & \dots \\
--F & (1+2F+\nu\Delta t) & -F & \dots \\
-0 & -F & (1+2F+\nu\Delta t) & -F \\
-\vdots & \vdots & -F & (1+2F+\nu\Delta t) 
-\end{bmatrix}
-\begin{bmatrix} 
-T_1^{n+1} \\
-T_2^{n+1} \\
-T_3^{n+1} \\
-\vdots \\
-T_N^{n+1}
-\end{bmatrix}
-=
-\begin{bmatrix} 
-T_1^n + \nu \Delta t T_\infty + F T_L \\
-T_2^n + \nu \Delta t T_\infty \\
-T_3^n + \nu \Delta t T_\infty \\
-\vdots \\
-T_N^n + \nu \Delta t T_\infty + F T_R
-\end{bmatrix}\]
-
-\[\rho c_p \frac{\partial T}{\partial t} = k \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
 
 \end{document}
