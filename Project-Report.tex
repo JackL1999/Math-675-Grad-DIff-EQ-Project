@@ -265,14 +265,48 @@
     \end{enumerate}
     \noindent \\\\
     \textbf{Summary Please its too much} \\
-    \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n} + \mathbf{b}_{bc}\]
-    \[\Downarrow \quad \quad \quad \Downarrow \quad \quad \quad \Downarrow \]
-    \[f(x) = \frac{a_0}{2} + \sum_{n=1}^{100} a_n \cos(nx) + b_n \sin(nx)\]
-    \[\Downarrow \quad \quad \quad \Downarrow \quad \quad \quad \Downarrow \]
-    \[S = \sum_{i=1}^{n} \left( y_i - f(x_i) \right)^2 \]
+    \begin{enumerate}
+        \item Backwards Euler to find all the datapoints:
+            \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n} + \mathbf{b}_{bc}\]
+        \item Fourier Series to build Continuous function:
+            \[f(x) = \frac{a_0}{2} + \sum_{n=1}^{100} a_n \cos(nx) + b_n \sin(nx)\]
+        \item Least Squares to compare model vs data:
+            \[S = \sum_{i=1}^{n} \left( y_i - f(x_i) \right)^2 \]
+    \end{enumerate}
     
-
+    \noindent
     \textbf{What does the code tell us?} \\
+   
+    \begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|l|l|l|}
+    \hline
+    \textbf{Symbol} & \textbf{Parameter} & \textbf{Value} & \textbf{Units} \\ \hline
+    $\rho$ & Density & 7828.79 & kg/m$^3$ \\ \hline
+    $c_p$ & Specific Heat Capacity & 502 & J/(kg$\cdot$K) \\ \hline
+    $k$ & Thermal Conductivity & 11.313 & W/(m$\cdot$K) \\ \hline
+    $\nu$ & Kinematic Viscosity & 0.096 & m$^2$/s \\ \hline
+    $\alpha$ & Thermal Diffusivity & 0.224 & m$^2$/s \\ \hline
+    $T_\infty$ & Ambient Temperature & 20.8 & $^\circ$C \\ \hline
+    \end{tabular}
+    \caption{Summary of Material Constants and Environmental Parameters}
+    \label{table:material_props}
+    \end{table}
+    \[\frac{\partial T}{\partial t} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)
+    \Longrightarrow \rho c_p \frac{\partial T}{\partial t} = k \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
+    \[\frac{\partial T}{\partial t} = 0.022387 \frac{\partial^2 T}{\partial x^2} - 0.096192(T - 20.8)\]
+    Thus, this is our final Heat Equation with everything plugged in, 
+    and now we can use this to find temperature values between the data points 
+    and take derivates and actual use math to explore other details and info rather
+
+    \textbf{How accurate is our model?} \\
+    Quite accurate! The images below show that both plots look nearly identical. Honestly surprised we could take 4000 points per thermocouple and get such a good fit with only 6 spatial points. 
+    The code also outputs a highly detailed chart of all the obtained values, with standard error, the unknown parameter estimation errors, and more.
+    \subsection*{\textcolor{blue}{Important Mention: Show some example graphs and talk about it and computation time}}
+
+\section*{Analysis and Results of Real World Model}
+
     \begin{table}[h]
     \centering
     \caption{Thermal Parameter Comparison: Bulk Copper vs. 3D-Printed Steel (XN)}
@@ -293,42 +327,6 @@
     \bottomrule
     \end{tabularx}
     \end{table}
-
-    \[\frac{\partial T}{\partial t} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)
-    \Longrightarrow \rho c_p \frac{\partial T}{\partial t} = k \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
-    VALUES FOR Xn1-5, redo for Cu1-5 on Windows
-    \begin{itemize}
-        \item $\rho \approx 7828.79$
-        \item $c_p \approx 502$
-        \item $k \approx 11.313$
-        \item $\nu \approx 0.096$ 
-        \item $\alpha \approx 0.224$
-        \item with $T_{\infty} = 20.8$
-    \end{itemize}
-    \begin{table}[h!]
-    \centering
-    \renewcommand{\arraystretch}{1.5}
-    \begin{tabular}{|c|l|l|l|}
-    \hline
-    \textbf{Symbol} & \textbf{Parameter} & \textbf{Value} & \textbf{Units} \\ \hline
-    $\rho$ & Density & 7828.79 & kg/m$^3$ \\ \hline
-    $c_p$ & Specific Heat Capacity & 502 & J/(kg$\cdot$K) \\ \hline
-    $k$ & Thermal Conductivity & 11.313 & W/(m$\cdot$K) \\ \hline
-    $\nu$ & Kinematic Viscosity & 0.096 & m$^2$/s \\ \hline
-    $\alpha$ & Thermal Diffusivity & 0.224 & m$^2$/s \\ \hline
-    $T_\infty$ & Ambient Temperature & 20.8 & $^\circ$C \\ \hline
-    \end{tabular}
-    \caption{Summary of Material Constants and Environmental Parameters}
-    \label{table:material_props}
-    \end{table}
-    \[\frac{\partial T}{\partial t} = 0.022387 \frac{\partial^2 T}{\partial x^2} - 0.096192(T - 20.8)\]
-
-    \textbf{How accurate is our model?} \\
-    Quite accurate! The images below show that both plots look nearly identical. Honestly surprised we could take 4000 points per thermocouple and get such a good fit with only 6 spatial points. 
-    The code also outputs a highly detailed chart of all the obtained values, with standard error, the unknown parameter estimation errors, and more.
-    \subsection*{\textcolor{blue}{Important Mention: Show some example graphs and talk about it and computation time}}
-
-\section*{Analysis and Results of Real World Model}
 
 \section*{Discussion}
 
@@ -414,26 +412,7 @@
     \end{itemize}
 
 \vspace{10cm}
-\begin{table}[h]
-\centering
-\caption{Thermal Parameter Comparison: Bulk Copper vs. 3D-Printed Steel (XN)}
-\label{tab:material_comparison}
-% We use 'l' for the labels and 'c' for the numbers to keep them tight. 
-% The final 'X' column will take up all the remaining horizontal space.
-\begin{tabularx}{\textwidth}{l c}
-\toprule
-\textbf{Property} & \textbf{Copper} \\
-\midrule
-Conductivity ($k$) & $384.72$ W/m$\cdot^{\circ}\text{C}$ \\
-\addlinespace
-Diffusivity ($\alpha$) & $0.0738$ m$^2$/s \\
-\addlinespace
-Convection ($h$) & $165.41$ W/m$^2\cdot^{\circ}\text{C} $ \\
-\addlinespace
-Avg. Std. Error & $0.95$ \\
-\bottomrule
-\end{tabularx}
-\end{table}
+
 
 \vspace{2cm}
 
