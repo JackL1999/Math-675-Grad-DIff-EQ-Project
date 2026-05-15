@@ -251,9 +251,9 @@ INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmex10.tf
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex8.tfm
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex7.tfm
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcrm1095.tfm
-INPUT C:\Users\jling\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbx10.tfm
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmti10.tfm
+INPUT C:\Users\jling\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbx8.tfm
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbx6.tfm
 INPUT .\Project Images\Space is Frozen.png
@@ -277,6 +277,13 @@ INPUT .\Project Images\Copper-vs-3DPSS.png
 INPUT .\Project Images\Copper-vs-3DPSS.png
 INPUT .\Project Images\Copper-vs-3DPSS.png
 INPUT .\Project Images\Copper-vs-3DPSS.png
+INPUT .\Project Images\Ultimate Point.png
+INPUT .\Project Images\Ultimate Point.png
+INPUT .\Project Images\Ultimate Point.png
+INPUT .\Project Images\Ultimate Point.png
+INPUT .\Project Images\Ultimate Point.png
+INPUT .\Project Images\Ultimate Point.png
+INPUT .\Project Images\Ultimate Point.png
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcrm1000.tfm
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbx10.tfm
 INPUT C:\Users\jling\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmti10.tfm

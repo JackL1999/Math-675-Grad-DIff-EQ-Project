@@ -43,7 +43,6 @@
     \\\\
     But because this is a difficult equation to solve analytically and even more complicated to obtain a nice closed form solution, we can use an iterative method to approximate the temperature distribution along the rod at discrete points in space and time.
     This method allows us to solve this equation, we can use the finite element method (FEM) to discretize the spatial domain and then apply a time-stepping scheme to evolve the solution over time.
-    \\\\
     FEM is quite similar to a finite difference method, but as we deal with more complex geometries and higher dimensions, the finite element method becomes more advantageous due to its flexibility in handling irregular meshes and complex boundary conditions.
 
 \section*{Background}
@@ -64,6 +63,7 @@
     This new unit is called the Volumetric Heat Capacity, which represents the amount of heat required to raise the temperature of a unit volume of the material by one degree Celsius. 
     It is a crucial parameter in understanding how materials respond to thermal energy and is commonly used in heat transfer calculations and thermal analysis. 
     \begin{table}[h]
+\vspace{1cm}
 \captionsetup{labelformat=empty, justification=raggedright, singlelinecheck=off}
 \centering
 \caption{\textbf{How do we build the heat equation from scratch?}}
@@ -91,6 +91,7 @@
 \end{tabularx}
 \end{table}
 
+\vspace{6cm}
 \section*{Model Development}
     
     \subsection*{Boundary and Initial Conditions}
@@ -128,6 +129,9 @@
     Rearranging this gives us to solve for the temperature at the next time step given the current temperature distribution:
     \[T^{n+1}\mathbf{I} = T^n\mathbf{I} + \alpha \Delta t \mathbf{K}^{(e)}\]
     \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n}\]
+
+    \vspace{4cm}
+    \noindent
     Now, we can express the spatial second derivative using the finite element method, which leads to a
     system of equations that can be represented in matrix form as:
 
@@ -156,7 +160,24 @@
     \vdots \\
     T_N^n + \nu \Delta t T_\infty + F T_R
     \end{bmatrix}\]
-
+    
+    \noindent
+    Now that we have formed our system, notice how this is looked like a tri-diagonal 
+    $Ax=b$ matrix system. We have many ways to solve this now, and with the tri-diagonal aspect, 
+    it's even easier to solve with a computer.
+    Even though this looks like a mess, theres a lot of unchanging values on both sides.
+    This form is saying that given a matrix that explains how heat propigates to and from
+    it's neighbors and by how much, we can multiply it by the future temperature values at 
+    those points which results in the temperature values in the present.
+    \\\\
+    Backward's euler is just weird like that, but, this is the best way of doing this.
+    This algorithm will always converge to the values we want and the steady state,
+    unlike forwards euler which could easily blow up if things become unstable too fast.
+    This also allows for any step size of time and space, so we wouldn't need to have a itty
+    bitty time step and calculate from the start to end time with who knows how many iterations.
+    We can have a step size pretty large like 1 and it will still result in the same solution.
+    Notice also we end up with all the unknowns on the left side and all the knowns on the right.
+    This form also allows a computer to solve it easier as well and so much faster than by hand \\\\
     \noindent
     \textbf{3. Boundary Treatment (Dirichlet):} \\
     \noindent
@@ -165,14 +186,16 @@
     meaning there is no net heat flow and the temperature distribution is stable.
     \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n} + \mathbf{b}_{bc}\]
     
+    \vspace{4cm}
     \noindent
-    \textbf{4. Examples of Space vs Time Discretization:} \\
+    \textbf{4. Examples of Space vs Time Discretization:} \\\\
+    \indent\textbf{Consider if we only look at changes in the time dimension} \\
     \begin{figure}[h] % Requires \usepackage{float}
     \centering
     % Left Minipage
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{"Project Images/Space is Frozen.png"}
+        \includegraphics[width=0.80\textwidth]{"Project Images/Space is Frozen.png"}
         \caption{Time Increase as space slices are frozen}
     \end{minipage}
     \hfill % This adds horizontal space to push the images to the edges
@@ -192,13 +215,15 @@
         \end{itemize}
     \end{minipage}
     \end{figure}
-
+    \hrule
+    \vspace{1cm}
+    \textbf{Consider if we only look at changes in the spacial dimension} \\
     \begin{figure}[h] % Requires \usepackage{float}
     \centering
     % Left Minipage
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{"Project Images/Time is Frozen.png"}
+        \includegraphics[width=0.80\textwidth]{"Project Images/Time is Frozen.png"}
         \caption{Space slices increase as time is frozen}
     \end{minipage}
     \hfill % This adds horizontal space to push the images to the edges
@@ -218,7 +243,7 @@
         \end{itemize}
     \end{minipage}
     \end{figure}
-\vspace{10cm}
+\vspace{15cm}
 \section*{Analysis and Results of General Model}
 One key takeaway is that having many many time points to measure and many many space points to measure
 can greatly help get the best data from the heated tube along with seeing the flow progression better.
@@ -252,13 +277,13 @@ from actual real world data. So lets grab some and see what we can do with it
     \textbf{Using a Real World Dataset} \\
     We are going to use a pretty large dataset of temperature measurements along a rod over time, which was collected by students at the Missouri University of Science and Technology.
     This dataset also provides extra parameters for different types of metals and a setting for including wind moving the air outside of the rod. 
-
-    \subsection*{\textcolor{blue}{Important mention: In the main corner models, we had a similar number of space and time points, but this model has way more time points to compensate for barely any space points}}
+    \\\\
+    \noindent
     From what we mentioned before, this dataset is unique because the experiement only had 6 points along the rod that measureed the temperateure, but they had 4000 time steps, 
     which compensates for the few spatial points and allows us to have a more accurate model with such a high degree of precision. \\
-
+    \\\\\\
     \noindent
-    \textbf{What is this provided code doing?} \\
+    \textbf{What settings do we have in the code?} \\
     First off, Magic. Secondly, we were given a list of material properties and respective settings
     \begin{itemize}
         \item Aluminum (Al): \\ Density = 2700 $kg/m^3$, Thermal Conductivity = 205 $W/m\cdot^\circ C$, Specific Heat = 900 $J/kg\cdot^\circ C$
@@ -285,7 +310,8 @@ from actual real world data. So lets grab some and see what we can do with it
     \end{itemize}
     These setings are a bit confusing at first, but due to the nature of 3D printing, depending on the leading direction of printing, 
     the cooling fan, can affect extrution and the drying progress so the densitiy and thermal properties of the rod are slightly different. \\
-
+    \\\\\\\\\\\\\\
+    \textbf{What is this provided code doing?} \\
     Depending on the options we choose, the code will pull an excel file provided by those students that are about 4000 rows by 8 columns of data. 
     Then the code compiles it together and from the best of my understanding, does the following:
     \begin{enumerate}
@@ -302,7 +328,7 @@ from actual real world data. So lets grab some and see what we can do with it
     and i havent quite understood entirely what its exactly doing, 
     but i at least figured out the general steps. I hope that after this semester ends I can 
     look back and dive deeper and really pick it apart because its fasinating.
-    \noindent \\\\
+    \newpage
     \textbf{Summary of the Main important steps} \\
     \begin{enumerate}
         \item Backwards Euler to find all the datapoints:
@@ -324,7 +350,7 @@ from actual real world data. So lets grab some and see what we can do with it
     $\rho$ & Density & 7828.79 & kg/m$^3$ \\ \hline
     $c_p$ & Specific Heat Capacity & 502 & J/(kg$\cdot$C) \\ \hline
     $k$ & Thermal Conductivity & 11.313 & W/(m$\cdot$C) \\ \hline
-    $\nu$ & Kinematic Viscosity & 0.096 & m$^2$/s \\ \hline
+    $\nu$ & Convection Coefficien & 0.096 & m$^2$/s \\ \hline
     $\alpha$ & Thermal Diffusivity & 0.224 & m$^2$/s \\ \hline
     $T_\infty$ & Ambient Temperature & 20.8 & $^\circ$C \\ \hline
     \end{tabular}
@@ -336,8 +362,10 @@ from actual real world data. So lets grab some and see what we can do with it
     \[\frac{\partial T}{\partial t} = 0.022387 \frac{\partial^2 T}{\partial x^2} - 0.096192(T - 20.8)\]
     Thus, this is our final Heat Equation with everything plugged in, 
     and now we can use this to find temperature values between the data points 
-    and take derivates and actual use math to explore other details and info rather \\
-
+    and take derivates and actual use math to explore other details and infomation.
+    This code was able to find the approximate values of 5 unknowns just from the sheer
+    volume of data points we fed into it, quite impressive.\\
+    \newpage
     \noindent
     \textbf{How accurate is our model?} \\
     Quite accurate! The images below show that both plots look nearly identical, which I will explain more in a bit.
@@ -347,8 +375,9 @@ from actual real world data. So lets grab some and see what we can do with it
     but strapping 10, 20, 50 thermometers on a 15 cm metal rod seems very difficult, yet we can tell a computer to get a reading 
     every 100th of a second much easier, so that was probably the best way to go about this.
     The code also outputs a highly detailed chart of all the obtained values, with standard error, the unknown parameter estimation errors, and more.
-
-\section*{Analysis and Results of Real World Model}
+    
+    \section*{Analysis and Results of Real World Model}
+    \vspace{-0.5cm}
     \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{"Project Images/Copper-vs-3DPSS.png"}
@@ -386,10 +415,37 @@ from actual real world data. So lets grab some and see what we can do with it
     Even if the analogy doesnt hit as well as i want it to, we can still imagine and feel how different they are.
     As we said before, we had settings for regular stainless steel and aluminum and we produce a similar very accurate graph.
 
+\section*{Final Conclusions and Takeaways}
+\begin{figure}[h] % Requires \usepackage{float}
+    \centering
+        \centering
+        \includegraphics[width=\textwidth]{"Project Images/Ultimate Point.png"}
+        \caption{Data to solved parameters to completed PDE}
+    \end{figure}
+\noindent
+(Appologies for the crude copy paste diagram from the slides, 
+didn't know how to  represent this as latex easily) \\
 
-\section*{Discussion}
-
-\section*{Conclusions}
+What we have done is used 1500 data points per thermocouple, plugged it into the magic code
+that does that 8 step algorithm process, obtained a damn good approximation for all of the
+unknown parameters, then we plugged it into the general PDE to build our quite accurate
+new Heat Equation. We mentioned before that now we have a continuous function rather than a
+massive list of discrete point values, so we can now apply calculus to this equation.
+We can attempt to find mins and maxes, nullclines and fixes point, and anything else we know.
+We could also find a closed form solution to this now, but I didn't attempt that sadly.
+This is just one single excel spreadsheet of data, but there were so many more, 
+based on percentage of electrial power pushed into the tube for heat, 
+the various multiple trials done, print direction for 3D printing,
+and if wind was a factor pushing the outside air and not just ambient constant temperature.
+Each would have its own slightly different but still unique heat equation representation
+and different changes for each parameter that we can investigate and make other conclusions on.
+Overal, as previously mentioned, since this is a tube, all of the space data points are connected
+linearly and sequentially. If we were to model a cube or a more complex model like a jeep or a cow
+we would need more heat map readings all over the surface with using maybe triangular meshes
+or some other connections to describe the whole system and build more complex equations.
+Finite element analysis can handle some pretty complicated models, as long as we help it along
+and define all of our connections, have a clear purpose and objective, then we could
+numerically solve the system for a heat map or various other purposes.
 
 \section*{Post Presenting Notes}
 
@@ -406,32 +462,52 @@ how the calculation time changes as we increase time steps and space steps in or
 finite difference approximation methods, etc. Overal I'm super glad I went down the route of using real world data
 since that helped strengthen our project and its something better and more interesting to latch on to and learn.
 
+\newpage
+
 \section*{Reflection (1 Page)}
 
-\begin{itemize}
-    \item Include a short reflection addressing:
-    \item What feedback did you receive on your poster?
-    \item What did you improve in the presentation and paper?
-    \item What mathematical aspects did you deepen?
-    \item What did you learn about communicating applied math?
-\end{itemize}
+We/I received a lot of wonderful feedback on our poster. 
+The poster felt quite weak when talking about general cases and general forms
+and so many images that all felt the same. There was no conclusion or punch line as a takeaway
+or even something sizeable to learn, especially not cool enough to present.
+Thats where the very important recommendation to find real world data came in handy.
+Once i found that magic code, learned about it, digested it, and talked about it with the 
+generated plots, it saved my poster. Due to the time crunch I had, real world data
+was only about 20\% of the poster, but now it jumped to about 80\% for the presentation.
+Oh boy was there a lot to unpack and show off. 
+\\\\
+I deepened my understanding, arguably not by much, but being more fluent in the code
+and the process of converting raw data to a PDE felt like I could chew on something meatier
+rather than playing around with hypotheticalls and silly rainbow graphs.
+I feel like that i even deepened my understand of the process of backwards euler and how to
+convert a PDE into a solveable matrix system, I was quite fuzzy on both as it has been a year
+since i last touched either, but I forgot how powerful they both are. Paring this with
+the code's fourier series approximation and sum of least squares, theres still much more
+to fully understand and digest but thats gonna be a fun summer project.
+\\\\
+I've been getting better at communicating applied math, years ago i used to real symbol
+by symbol every damn step of every calculation. But now, im smart enough to both
+acceptably assume the audience knows a fair amount of math to gloss over,
+but more importantly to express the math in a succinct but clear way. 
+I dont need to explain every step for building the heat equation nor explain every step
+of the magic code, but enough clear wording and what its doing rather than how is key.
+\\\\
+Overall, this has been the most involved project I have ever done and i felt
+intimidated presenting it and explaining it. I kept feeding little bite sized pieces
+to classmates and they were so intriqued and wanted to know more, the same way i felt
+about their presentations too. The story of the presentation flowed wonderfully,
+had a good 3 act structure, and a nice punchline and the feedback helped me realize a 
+great lesson: more pictures and more diagrams does not imply more understanding and more clarity.
+\\\\
+I feel that having a poster session also gave me a good sense of where I was in terms
+of content, structure, and depth. It gave me more motivation to keep going,
+and since all my friends had such cool concepts, I wanted a cool one myself. 
+The slides were a bit of a challenge too, how much should i add, how little should I explain
+but it helped push me in the right direction of communication and the better I can present
+a topic, the more informed I am of it and that makes me feel like i know what im doing.
 
-\subsection*{Audio Feedbackn from Poster}
-    \begin{enumerate}
 
-        \item well executed focus and application
-        \item stronger applied poster in the class
-        \item bit of visual clutter (images too big) and more story
-        \item clear images but print whole poster
-        \item great font sizes to see from a distance
-        \item main thing is add more detailed images and less frozen either and hard to itentify final result since they look too similar
-        \item great analysis of heat equation and details behind them and how the method works
-        \item really like i took olivers suggestion for real world data thats a strong element of the poster and great contant i can keep leaning on
-        \item main take away is clear but modify the first parts of story and last part is great
-        \item what did we learn feedback, a box for the take away, not obvious for conclusion for reader but great understanding
-        \item need to show off the references more in poster but pretty good 98%
-    \end{enumerate}
-    \end{onehalfspace}
+\end{onehalfspace}
 
 \vspace{15cm}\
 {
