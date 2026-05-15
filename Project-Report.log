@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.8.14)  14 MAY 2026 21:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.8.14)  14 MAY 2026 22:37
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -654,7 +654,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [4 <./Project Images/Space is Frozen.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 243--245
+Underfull \hbox (badness 10000) in paragraph at lines 223--236
 
  []
 
@@ -668,7 +668,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [5 <./Project Images/Time is Frozen.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 272--274
+Underfull \hbox (badness 10000) in paragraph at lines 248--250
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 257--259
 
  []
 
@@ -682,17 +687,17 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 287--293
+Underfull \hbox (badness 10000) in paragraph at lines 286--288
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 287--293
+Underfull \hbox (badness 10000) in paragraph at lines 301--307
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 302--320
+Underfull \hbox (badness 10000) in paragraph at lines 301--307
 
  []
 
@@ -706,19 +711,31 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [7]
-Underfull \hbox (badness 10000) in paragraph at lines 322--326
+Underfull \hbox (badness 10000) in paragraph at lines 316--334
 
  []
 
-<Project Images/Copper-vs-3DPSS.png, id=78, 831.105pt x 254.45062pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 336--340
+
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[8]
+<Project Images/Copper-vs-3DPSS.png, id=83, 831.105pt x 254.45062pt>
 File: Project Images/Copper-vs-3DPSS.png Graphic file (type png)
 <use Project Images/Copper-vs-3DPSS.png>
-Package pdftex.def Info: Project Images/Copper-vs-3DPSS.png  used on input line 336.
+Package pdftex.def Info: Project Images/Copper-vs-3DPSS.png  used on input line 354.
 (pdftex.def)             Requested size: 542.02501pt x 165.95392pt.
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -727,21 +744,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[8 <./Project Images/Copper-vs-3DPSS.png>]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[9]
-Overfull \hbox (24.84538pt too wide) in paragraph at lines 409--411
-[][]$\OT1/cmtt/m/n/10 https : / / www . simscale . com / docs / simwiki / fea-[]finite-[]element-[]analysis / what-[]is-[]fea-[]finite-[]element-[]analysis/$[][] 
- []
-
-
+[9 <./Project Images/Copper-vs-3DPSS.png>]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -751,17 +754,31 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [10]
-Overfull \hbox (75.84492pt too wide) in paragraph at lines 435--437
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[11]
+Overfull \hbox (24.84538pt too wide) in paragraph at lines 452--454
+[][]$\OT1/cmtt/m/n/10 https : / / www . simscale . com / docs / simwiki / fea-[]finite-[]element-[]analysis / what-[]is-[]fea-[]finite-[]element-[]analysis/$[][] 
+ []
+
+
+Overfull \hbox (75.84492pt too wide) in paragraph at lines 478--480
 [][]$\OT1/cmtt/m/n/10 https : / / github . com / JackL1999 / Math-[]675-[]Grad-[]DIff-[]EQ-[]Project / blob / main / Project % 20Online % 20Data / oneDkhEstimatorWin .
  []
 
 
-Overfull \hbox (10.34547pt too wide) in paragraph at lines 444--446
+Overfull \hbox (10.34547pt too wide) in paragraph at lines 487--489
 [][]$\OT1/cmtt/m/n/10 https : / / docs . google . com / presentation / d / 1VPHus1hrQ4LEmZuCRAmAq4DViZxpAG3NeTNOqDCx5iA / edit ? usp = sharing$[][] 
  []
 
 
-Overfull \hbox (10.34547pt too wide) in paragraph at lines 447--449
+Overfull \hbox (10.34547pt too wide) in paragraph at lines 490--492
 [][]$\OT1/cmtt/m/n/10 https : / / docs . google . com / presentation / d / 12PqFTOBQ9jGK5aHqCC0VSaQxrgSarbEYJ4f69zTSPOY / edit ? slide = id . p #
  []
 
@@ -774,7 +791,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[11] (Project-Report.aux)
+[12] (Project-Report.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-07-20>
@@ -784,16 +801,16 @@ Package rerunfilecheck Info: File `Project-Report.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  22035 strings out of 468134
- 414031 string characters out of 5430740
+ 414027 string characters out of 5430740
  809497 words of memory out of 5000000
  50257 multiletter control sequences out of 15000+600000
  635900 words of font info for 71 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,13n,87p,479b,625s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,13n,87p,479b,619s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\jling\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk> <C:\Users\jling\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1095.pk><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/jling/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on Project-Report.pdf (11 pages, 530994 bytes).
+Output written on Project-Report.pdf (12 pages, 535280 bytes).
 PDF statistics:
- 219 PDF objects out of 1000 (max. 8388607)
+ 222 PDF objects out of 1000 (max. 8388607)
  60 named destinations out of 1000 (max. 500000)
  28 words of extra memory for PDF output out of 10000 (max. 10000000)
 

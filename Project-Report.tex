@@ -127,9 +127,9 @@
     \noindent
     Rearranging this gives us to solve for the temperature at the next time step given the current temperature distribution:
     \[T^{n+1}\mathbf{I} = T^n\mathbf{I} + \alpha \Delta t \mathbf{K}^{(e)}\]
+    \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n}\]
     Now, we can express the spatial second derivative using the finite element method, which leads to a
     system of equations that can be represented in matrix form as:
-    \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n}\]
 
     \[\frac{dT}{dt} = \alpha \frac{\partial^2 T}{\partial x^2} - \nu(T - T_\infty)\]
     \[\frac{T_i^{n+1} - T_i^n}{\Delta t} = \alpha \left( \frac{T_{i+1}^{n+1} - 2T_i^{n+1} + T_{i-1}^{n+1}}{(\Delta x)^2} \right) - \nu(T_i^{n+1} - T_\infty)\]
@@ -199,7 +199,7 @@
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{"Project Images/Time is Frozen.png"}
-        \caption{Time Increase as space slices are frozen}
+        \caption{Space slices increase as time is frozen}
     \end{minipage}
     \hfill % This adds horizontal space to push the images to the edges
     % Right Minipage
@@ -214,12 +214,25 @@
                   see the quality and accuracy of the model increase
             \item Notice we do eventually reach the same approximate steady state solution
             \item The temperature of the data is constant but this helps us "see" 
-                  how taking more slices along the tube can give us better readings
+                  how taking more slices along the tube can give us better accurate readings
         \end{itemize}
     \end{minipage}
     \end{figure}
 \vspace{10cm}
 \section*{Analysis and Results of General Model}
+One key takeaway is that having many many time points to measure and many many space points to measure
+can greatly help get the best data from the heated tube along with seeing the flow progression better.
+Computationally, its not ideal to have lets say making 1000 time steps along with 1000 space steps, since, roughly, thats 
+a million data values in the matrix system. Not super sure on that but you get the idea. Unless we plot a 3D graph of time vs space vs temperature, its
+not easy to get all of the information all at once, so its best to measure one "dimension" at once.
+\\\\
+Because this is the general model, we can substitute any values to any of the constants
+we could theoretially calculate and plot something very unrealistic, but we have
+full control of everything. This can be bad because unless we knew a good range for 
+every constant, just guessing and hoping for something realistic is quite difficult.
+When I was messing around with $\alpha$, I made it negitive, positive, 1, 10,1000, 0.0005, etc
+but as we will see later, a good approximate value is about 0.022, which we later gather
+from actual real world data. So lets grab some and see what we can do with it
 
 \section*{Real World Data Comparison}
 
@@ -233,8 +246,9 @@
     \end{itemize}
     If we convert this to a similar backward Euler scheme, we can derive the following scheme:
     \[(\mathbf{I} - \alpha \Delta t \mathbf{K}' + \nu \Delta t \mathbf{I}) \mathbf{T}^{n+1} = \mathbf{T}^{n} + \nu \Delta t T_\infty\mathbf{I} + \mathbf{b}_{bc}\]
-    This now makes the iteration scheme a bit more complicated than before, yet all we've actually done is add more constants to both sides of the equation to involve the ambient temperature.
+    This now makes the iteration scheme a bit more complicated than before, yet all we've actually done is add more constants to both sides of the equation to involve the ambient temperature. \\
     
+    \noindent
     \textbf{Using a Real World Dataset} \\
     We are going to use a pretty large dataset of temperature measurements along a rod over time, which was collected by students at the Missouri University of Science and Technology.
     This dataset also provides extra parameters for different types of metals and a setting for including wind moving the air outside of the rod. 
@@ -250,7 +264,7 @@
         \item Aluminum (Al): \\ Density = 2700 $kg/m^3$, Thermal Conductivity = 205 $W/m\cdot^\circ C$, Specific Heat = 900 $J/kg\cdot^\circ C$
         \item Stainless Steel (SS): \\ Density = 8000 $kg/m^3$, Thermal Conductivity = 16 $W/m\cdot^\circ C$, Specific Heat = 500 $J/kg\cdot^\circ C$
         \item Copper (Cu): \\ Density = 8900 $kg/m^3$, Thermal Conductivity = 385 $W/m\cdot^\circ C$, Specific Heat = 385 $J/kg\cdot^\circ C$
-        \item 3D Printed Stainless Steel (ADD): \\ Density = 8000 $kg/m^3$, Thermal Conductivity = 16 $W/m\cdot^\circ C$, Specific Heat = 500 $J/kg\cdot^\circ C$ \\ (but with different thermal properties based on printing direction)
+        \item 3D Printed Stainless Steel (ADD): \\ Density = 8000 $kg/m^3$, Thermal Conductivity = 16 $W/m\cdot^\circ C$, Specific Heat = 500 $J/kg\cdot^\circ C$ \\ (but with different thermal properties based on printing direction and cooling fan air flow)
     \end{itemize}
     \noindent
     Material and environmental settings for the dataset:
@@ -308,8 +322,8 @@
     \hline
     \textbf{Symbol} & \textbf{Parameter} & \textbf{Value} & \textbf{Units} \\ \hline
     $\rho$ & Density & 7828.79 & kg/m$^3$ \\ \hline
-    $c_p$ & Specific Heat Capacity & 502 & J/(kg$\cdot$K) \\ \hline
-    $k$ & Thermal Conductivity & 11.313 & W/(m$\cdot$K) \\ \hline
+    $c_p$ & Specific Heat Capacity & 502 & J/(kg$\cdot$C) \\ \hline
+    $k$ & Thermal Conductivity & 11.313 & W/(m$\cdot$C) \\ \hline
     $\nu$ & Kinematic Viscosity & 0.096 & m$^2$/s \\ \hline
     $\alpha$ & Thermal Diffusivity & 0.224 & m$^2$/s \\ \hline
     $T_\infty$ & Ambient Temperature & 20.8 & $^\circ$C \\ \hline
@@ -326,9 +340,13 @@
 
     \noindent
     \textbf{How accurate is our model?} \\
-    Quite accurate! The images below show that both plots look nearly identical. Honestly surprised we could take 4000 points per thermocouple and get such a good fit with only 6 spatial points. 
+    Quite accurate! The images below show that both plots look nearly identical, which I will explain more in a bit.
+    Honestly surprised we could take 4000 points per thermocouple and get such a good fit with only 6 spatial points
+    considering that we found out more time and more time points are always good. But the 4000 time points defintally compensate for
+    the lack of spacial thermocouple points. This is important to note because realistically, measuring temperature is simple
+    but strapping 10, 20, 50 thermometers on a 15 cm metal rod seems very difficult, yet we can tell a computer to get a reading 
+    every 100th of a second much easier, so that was probably the best way to go about this.
     The code also outputs a highly detailed chart of all the obtained values, with standard error, the unknown parameter estimation errors, and more.
-    \subsection*{\textcolor{blue}{Important Mention: Show some example graphs and talk about it and computation time}}
 
 \section*{Analysis and Results of Real World Model}
     \begin{figure}[h]
@@ -356,12 +374,37 @@
     \bottomrule
     \end{tabularx}
     \end{table}
+    Another way to confirm this code and model is correct is that the conductivity of 
+    copper *should* in fact be more than 3D printed Stainless Steel, same goes for 
+    Diffusitivity and Convenction from what we know of metal properties so that checks out.
+    Also, from the images above, all 1500 data points per thermocouple are barely visible, but again, remember they are just discrete points.
+    With this algorithm, we build the red model graphs, which look super accurate for both, which the bonus of being continuous everywhere.
+    We can note that a 3D printed object *should* also be more uniform in terms of density, material composition, imperfections, and heat transfer
+    thus we should expect the average standard error to be smaller. Metal poured into a cast to be shaped would probably be 
+    cooled ununiformly and could leave imperfections as it solidifies based on many factors too, 
+    just imagine the differnece between the internal structual composition of a tower made of wood vs plastic.
+    Even if the analogy doesnt hit as well as i want it to, we can still imagine and feel how different they are.
+    As we said before, we had settings for regular stainless steel and aluminum and we produce a similar very accurate graph.
+
 
 \section*{Discussion}
 
 \section*{Conclusions}
 
 \section*{Post Presenting Notes}
+
+Someone brought up a closed solution form for the solved or general heat equation. 
+I completely forgot to even consider that, since obviously we can't just have a complete PDE and immediately plot it.
+I also want to dive deeper in the code since I was asked how exactly the results of backwards euler gets subbed into
+the fourier series, since we need a function of some kind to build the coefficients of the series.
+It would also be nice to check on global and local stability or other applications from class.
+Also, having a farther apart central/backwards finite difference could lead to more accurate data too, 
+like for some reason what if we have a gap in data or we want less time steps, or various other reasons.
+Later on, I also want to write down and compare computation time for every code example and future ones.
+Even though my computer, can, I think, spit out all of these plots pretty quick, I would love to record
+how the calculation time changes as we increase time steps and space steps in orders of magnitudes, and the
+finite difference approximation methods, etc. Overal I'm super glad I went down the route of using real world data
+since that helped strengthen our project and its something better and more interesting to latch on to and learn.
 
 \section*{Reflection (1 Page)}
 
