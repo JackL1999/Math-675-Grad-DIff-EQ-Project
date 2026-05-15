@@ -8,6 +8,8 @@
 \usepackage{caption} % Add this to your preamble
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}
 \usepackage{setspace}
+\usepackage{graphicx}    
+\usepackage{tikz}
 \onehalfspacing
 
 \usepackage[
@@ -29,47 +31,12 @@
 
 \begin{document}
 \begin{center}
-    \LARGE \textbf{Heat Equation with Finite Element Analysis } \\[0.5cm]
+    \LARGE \textbf{Heat Equation with Finite Element Analysis \\ and Real World Data Analysis} \\[0.5cm]
     \large by Jack Linbeck and Joshua Dunne \\[0.3cm]
     \today
 \end{center}
-\large
-\begin{center}
-\fbox{\begin{tabular}{c}
-\bf Math 675 Spring 2026: \\
-\bf Project 2 Notes \\
-\bf Due Thursday, May 14th, 2026\\
-\end{tabular}}
-\end{center}
-\begin{onehalfspace}
 
-\section*{Progress Checklist}
-\begin{itemize}
-    \item \textcolor{blue}{\textbf{Introduction:} (Problem, motivation, and context)} \\
-    Completed
-    \item \textcolor{blue}{\textbf{Background:} (Definitions and setup)} \\
-    Completed
-    \item \textcolor{red}{\textbf{Model Development:} (Derivation and assumptions)} \\
-    Almost Done, needs images and more details
-    \item \textcolor{red}{\textbf{Analysis:} (Mathematical results and explanations)} \\
-    In Progress, needs images and more details
-    \item \textcolor{red}{\textbf{Discussion:} (Interpretation, limitations, and data considerations)} \\
-    \item \textcolor{blue}{\textbf{Real World Data Comparison:} (Comparison to actual dataset)} \\
-    Completed, squeezed as much info as i could from the code and dataset, but needs images and more details
-    \item \textcolor{red}{\textbf{Analysis:} (Mathematical results and explanations)} \\
-    In Progress, needs images and more details
-    \item \textcolor{red}{\textbf{Discussion:} (Interpretation, limitations, and data considerations)} \\
-    \item \textcolor{red}{\textbf{Deeper Dive?} (Extending ideas and exploring more complex models)} \\
-    \item \textcolor{red}{\textbf{Conclusion:} (Summary and extensions)} \\
-    \item \textcolor{red}{\textbf{Reflection:} (Audio Feeback changes and RECENT EMAIL NOTES} \\
-    \item \textcolor{red}{\textbf{AI Usage Citations:} (Clearly cite AI and explain how it was used)} \\
-    \item \textcolor{blue}{\textbf{References:} (Literature and sources)} \\
-    Completed, but should filter out the unnecessary ones
-    \item \textcolor{red}{\textbf{Include more images than poster:}} 
-    \item \textcolor{red}{\textbf{Final Formatting Tweaks:}} 
-    \item \textcolor{red}{\textbf{Final Page Count excluding Images:}}
-    \item \textcolor{red}{\textbf{Summary of work on Presentation:}}
-\end{itemize}
+\begin{onehalfspace}
 \section*{Introduction}
     If someone were to give you along rod that is heated at one end and cooled at the other, and that person told you to provide the temperature at a particular point along the rod at a particular time, you would not be automaically able to calculate that value without some external help or algorithms.
     We would want to solve a partial differential equation that describes how heat diffuses through the rod, which is called the heat equation, to understand how the temperature changes over time and space.
@@ -198,6 +165,60 @@
     meaning there is no net heat flow and the temperature distribution is stable.
     \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n} + \mathbf{b}_{bc}\]
     
+    \noindent
+    \textbf{4. Examples of Space vs Time Discretization:} \\
+    \begin{figure}[h] % Requires \usepackage{float}
+    \centering
+    % Left Minipage
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{"Project Images/Space is Frozen.png"}
+        \caption{Time Increase as space slices are frozen}
+    \end{minipage}
+    \hfill % This adds horizontal space to push the images to the edges
+    % Right Minipage
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{-4cm} 
+        \begin{itemize}
+            \item We set up the boundary conditions: \\ 100F on left, and 20F on right
+            \item Define a fixed value of space slices, in this case, 
+                  exactly 50 slices, to measure the temps
+            \item Allow time to increase from 20 to 2000 seconds 
+            \item We can figuritively hit play on the simulation and 
+                  see how the heat propigates along the tube
+            \item Notice we do eventually reach an approximate steady state solution
+            \item The resolution of the data is constant but this helps us "see" 
+                  how the heat flows along the tube until it reaches the cold end
+        \end{itemize}
+    \end{minipage}
+    \end{figure}
+
+    \begin{figure}[h] % Requires \usepackage{float}
+    \centering
+    % Left Minipage
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{"Project Images/Time is Frozen.png"}
+        \caption{Time Increase as space slices are frozen}
+    \end{minipage}
+    \hfill % This adds horizontal space to push the images to the edges
+    % Right Minipage
+    \begin{minipage}[t]{0.48\textwidth}
+        \vspace{-4cm} 
+        \begin{itemize}
+            \item We set up the boundary conditions: \\ 100F on left, and 20F on right
+            \item Define a fixed distribution of temperature, in this case, frozen at
+                  exactly 500 seconds, to measure the temps
+            \item Allow the space slices to increase from 10 to 1000 seconds 
+            \item We can figuritively hit play on the simulation and 
+                  see the quality and accuracy of the model increase
+            \item Notice we do eventually reach the same approximate steady state solution
+            \item The temperature of the data is constant but this helps us "see" 
+                  how taking more slices along the tube can give us better readings
+        \end{itemize}
+    \end{minipage}
+    \end{figure}
+\vspace{10cm}
 \section*{Analysis and Results of General Model}
 
 \section*{Real World Data Comparison}
@@ -263,8 +284,12 @@
         \item \textbf{Gathering Parameters}: This Magic Code found a great approximation for the following values: $\nu$, $k$, and $\alpha$ and $\frac{\partial T}{\partial y}$ at the boundaries, now we can substitude these values back into the PDE
         \item \textbf{Visual Comparison}:Then plots the predicted and actual temperature values over time to visually compare the model's performance against the real-world data.
     \end{enumerate}
+    Honestly, it's a bit unfortunate I cant easily show all 500 lines of code, 
+    and i havent quite understood entirely what its exactly doing, 
+    but i at least figured out the general steps. I hope that after this semester ends I can 
+    look back and dive deeper and really pick it apart because its fasinating.
     \noindent \\\\
-    \textbf{Summary Please its too much} \\
+    \textbf{Summary of the Main important steps} \\
     \begin{enumerate}
         \item Backwards Euler to find all the datapoints:
             \[(\mathbf{I} - \alpha \Delta t \mathbf{K}') \mathbf{T}^{n+1} = \mathbf{T}^{n} + \mathbf{b}_{bc}\]
@@ -275,8 +300,7 @@
     \end{enumerate}
     
     \noindent
-    \textbf{What does the code tell us?} \\
-   
+    \textbf{What does the code tell us?} \\\\
     \begin{table}[h!]
     \centering
     \renewcommand{\arraystretch}{1.5}
@@ -298,14 +322,19 @@
     \[\frac{\partial T}{\partial t} = 0.022387 \frac{\partial^2 T}{\partial x^2} - 0.096192(T - 20.8)\]
     Thus, this is our final Heat Equation with everything plugged in, 
     and now we can use this to find temperature values between the data points 
-    and take derivates and actual use math to explore other details and info rather
+    and take derivates and actual use math to explore other details and info rather \\
 
+    \noindent
     \textbf{How accurate is our model?} \\
     Quite accurate! The images below show that both plots look nearly identical. Honestly surprised we could take 4000 points per thermocouple and get such a good fit with only 6 spatial points. 
     The code also outputs a highly detailed chart of all the obtained values, with standard error, the unknown parameter estimation errors, and more.
     \subsection*{\textcolor{blue}{Important Mention: Show some example graphs and talk about it and computation time}}
 
 \section*{Analysis and Results of Real World Model}
+    \begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{"Project Images/Copper-vs-3DPSS.png"}
+    \end{figure}
 
     \begin{table}[h]
     \centering
@@ -332,6 +361,8 @@
 
 \section*{Conclusions}
 
+\section*{Post Presenting Notes}
+
 \section*{Reflection (1 Page)}
 
 \begin{itemize}
@@ -357,7 +388,11 @@
         \item what did we learn feedback, a box for the take away, not obvious for conclusion for reader but great understanding
         \item need to show off the references more in poster but pretty good 98%
     \end{enumerate}
-\vspace{15cm}
+    \end{onehalfspace}
+
+\vspace{15cm}\
+{
+\small
 \subsection*{References (1 Page)}
     \subsection*{General Links for Sources about FEA}
 
@@ -397,6 +432,9 @@
         \item \textbf{``oneDkhEstimator Required Dataset.''} \textit{Mendeley Data}. \\ 
         \url{https://data.mendeley.com/datasets/sbcf36976g/1}
 
+        \item \textbf{''Link to the Magic code directly from my Github Repository''} \textit{Jack's Github Files} \\
+        \url{https://github.com/JackL1999/Math-675-Grad-DIff-EQ-Project/blob/main/Project%20Online%20Data/oneDkhEstimatorWin.py}
+
         \item \textbf{``Gemini 3 Flash.''} \textit{Google AI}. \ \url{https://gemini.google.com}.
         \newline Used for generating 3D tube diagram code, used for understanding the provided magic code.
     \end{itemize}
@@ -410,35 +448,6 @@
         \url{https://docs.google.com/presentation/d/12PqFTOBQ9jGK5aHqCC0VSaQxrgSarbEYJ4f69zTSPOY/edit?slide=id.p#slide=id.p}
 
     \end{itemize}
-
-\vspace{10cm}
-
-
-\vspace{2cm}
-
-\begin{table}[h]
-\centering
-\caption{Thermal Parameter Comparison: Bulk Copper vs. 3D-Printed Steel (XN)}
-\label{tab:material_comparison}
-% We use 'l' for the labels and 'c' for the numbers to keep them tight. 
-% The final 'X' column will take up all the remaining horizontal space.
-\begin{tabularx}{\textwidth}{l c c X}
-\toprule
-\textbf{Property} & \textbf{Copper} & \textbf{3D Printed} & \textbf{Physical Interpretation} \\
-\midrule
-Conductivity ($k$) & $384.72$ W/m$\cdot^{\circ}\text{C}$ & $14.40$ W/m$\cdot^{\circ}\text{C}$ & 3DP is $\approx$ 26x more resistive to heat flow than Cu. \\
-\addlinespace
-Diffusivity ($\alpha$) & $0.0738$ m$^2$/s & $0.0213$ m$^2$/s & Cu reaches steady state $\approx$ 3.5x faster than 3DP. \\
-\addlinespace
-Convection ($h$) & $165.41$ W/m$^2\cdot^{\circ}\text{C} $& $128.70$ W/m$^2\cdot^{\circ}\text{C}$ & Variations due to ambient lab/wind conditions. \\
-\addlinespace
-Avg. Std. Error & $0.95$ & $0.73$ & Low error validates 1D FEA model robustness. \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\end{onehalfspace}
-
-
+}
 
 \end{document}
